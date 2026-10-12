@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7f4">
+  <meta name="description" content="Mizan, un outil gratuit et privé pour suivre ses dépenses en dirhams marocains.">
+  <title>Mizan — Budget personnel au Maroc</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Mizan, accueil">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none"><path d="M20 6v25M12 33h16M11 11h18M20 7l-8 4m8-4 8 4M12 11l-5 11h10L12 11Zm16 0-5 11h10l-5-11Z" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 23c1.1 3.1 3.4 4.7 7 4.7s5.9-1.6 7-4.7M21 23c1.1 3.1 3.4 4.7 7 4.7s5.9-1.6 7-4.7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg>
+      </span>
+      <span class="brand-copy"><strong>Mizan</strong><small data-i18n="brandSubtitle">Budget personnel · Maroc</small></span>
+    </a>
+    <div class="topbar-actions">
+      <span class="privacy-chip"><span class="privacy-dot"></span><span data-i18n="privateBadge">Tes données restent sur cet appareil</span></span>
+      <button class="language-button" id="languageToggle" type="button" aria-label="Switch language">العربية</button>
+    </div>
+  </header>
+
+  <main id="top" class="page-shell">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="heroEyebrow">TON ARGENT, À TON RYTHME</p>
+        <h1 id="heroTitle" data-i18n="heroTitle">Un budget plus clair.<br><span>Moins de charge mentale.</span></h1>
+        <p class="hero-description" data-i18n="heroText">Suis tes dépenses en dirhams, garde le contrôle de ton mois et fais tes comptes sans créer de compte.</p>
+        <div class="hero-tags">
+          <span class="hero-tag"><span aria-hidden="true">✦</span><span data-i18n="offlineBadge">Fonctionne hors ligne</span></span>
+          <span class="hero-tag"><span aria-hidden="true">⌂</span><span data-i18n="localBadge">Privé par défaut</span></span>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+        <div class="art-card">
+          <div class="art-card-top"><span class="art-dot"></span><span class="art-dot"></span><span class="art-dot"></span><span class="art-card-label">MIZAN / MAD</span></div>
+          <div class="art-card-caption">MONTHLY BALANCE</div>
+          <div class="art-card-amount">2 480 <small>MAD</small></div>
+          <div class="art-chart"><i style="height:36%"></i><i style="height:58%"></i><i style="height:45%"></i><i style="height:73%"></i><i style="height:55%"></i><i style="height:88%"></i><i style="height:66%"></i><i style="height:47%"></i><i style="height:78%"></i><i style="height:59%"></i><i style="height:92%"></i><i style="height:68%"></i></div>
+          <div class="art-card-bottom"><span></span><span></span></div>
+        </div>
+        <div class="art-sticker sticker-top">شوية بشوية</div>
+        <div class="art-sticker sticker-bottom"><span>✓</span> <span data-i18n="artSticker">Ça avance</span></div>
+      </div>
+    </section>
+
+    <section class="section-heading" aria-labelledby="overviewTitle">
+      <div>
+        <p class="eyebrow eyebrow-muted" data-i18n="overviewEyebrow">VUE D’ENSEMBLE</p>
+        <h2 id="overviewTitle"><span data-i18n="monthHeading">Ton mois</span><span class="heading-divider">·</span><span id="selectedMonthLabel" class="month-name">—</span></h2>
+      </div>
+      <div class="heading-controls">
+        <label class="month-control" for="monthPicker"><span data-i18n="monthLabel">Mois</span><input id="monthPicker" type="month"></label>
+        <button class="button button-secondary" id="exportCsv" type="button"><span class="button-icon" aria-hidden="true">↓</span><span data-i18n="exportCsv">Exporter CSV</span></button>
+      </div>
+    </section>
+
+    <section class="summary-grid" aria-label="Budget overview">
+      <article class="summary-card budget-summary">
+        <div class="summary-top"><span class="summary-icon icon-budget" aria-hidden="true">◈</span><button class="edit-budget" id="editBudget" type="button"><span data-i18n="editBudget">Modifier</span><span aria-hidden="true">↗</span></button></div>
+        <p class="summary-label" data-i18n="budgetLabel">Budget prévu</p>
+        <p class="summary-number" id="budgetAmount">—</p>
+        <div class="progress-track" id="budgetProgress" role="progressbar" aria-label="Budget used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="budgetProgressFill"></span></div>
+        <p class="summary-foot" id="budgetProgressText">—</p>
+      </article>
+      <article class="summary-card spent-summary">
+        <div class="summary-top"><span class="summary-icon icon-spent" aria-hidden="true">↗</span><span class="summary-corner" aria-hidden="true">●</span></div>
+        <p class="summary-label" data-i18n="spentLabel">Dépensé</p>
+        <p class="summary-number" id="spentAmount">—</p>
+        <p class="summary-foot" data-i18n="spentFoot">Sur le mois sélectionné</p>
+      </article>
+      <article class="summary-card left-summary">
+        <div class="summary-top"><span class="summary-icon icon-left" aria-hidden="true">◷</span><span class="summary-corner left-corner" aria-hidden="true">✦</span></div>
+        <p class="summary-label" data-i18n="leftLabel">Encore disponible</p>
+        <p class="summary-number" id="remainingAmount">—</p>
+        <p class="summary-foot" id="remainingFoot">—</p>
+      </article>
+    </section>
+
+    <div class="dashboard-grid">
+      <div class="main-column">
+        <section class="panel categories-panel" aria-labelledby="categoriesTitle">
+          <div class="panel-heading">
+            <div><p class="eyebrow eyebrow-muted" data-i18n="categoriesEyebrow">OÙ PART TON ARGENT</p><h2 id="categoriesTitle" data-i18n="categoriesTitle">Par catégorie</h2></div>
+            <span class="panel-mark" aria-hidden="true">◉</span>
+          </div>
+          <p class="panel-subtitle" data-i18n="categoriesSubtitle">Répartition de tes dépenses ce mois-ci.</p>
+          <div id="categoryBars" class="category-bars"></div>
+        </section>
+
+        <section class="panel transactions-panel" aria-labelledby="transactionsTitle">
+          <div class="panel-heading transaction-heading">
+            <div><p class="eyebrow eyebrow-muted" data-i18n="activityEyebrow">TES MOUVEMENTS</p><h2 id="transactionsTitle" data-i18n="transactionsTitle">Dépenses récentes</h2></div>
+            <label class="filter-control"><span class="sr-only" data-i18n="filterLabel">Filtrer par catégorie</span><select id="categoryFilter" aria-label="Filter by category"><option value="all">Toutes les catégories</option></select></label>
+          </div>
+          <p class="panel-subtitle" id="transactionsSubtitle">—</p>
+          <div id="transactionList" class="transaction-list"></div>
+        </section>
+      </div>
+
+      <aside class="side-column">
+        <section class="panel add-panel" aria-labelledby="addTitle">
+          <div class="panel-heading add-heading">
+            <div><p class="eyebrow eyebrow-muted" data-i18n="addEyebrow">À NOTER</p><h2 id="addTitle" data-i18n="addTitle">Ajouter une dépense</h2></div>
+            <span class="add-mark" aria-hidden="true">＋</span>
+          </div>
+          <p class="panel-subtitle" data-i18n="addSubtitle">Ça prend quelques secondes.</p>
+          <form id="expenseForm" class="expense-form" novalidate>
+            <label class="form-field" for="amountInput"><span data-i18n="amountLabel">Montant</span><span class="input-with-unit"><input id="amountInput" name="amount" type="number" inputmode="decimal" min="0.01" max="100000000" step="0.01" placeholder="0,00" required><span class="input-unit">MAD</span></span></label>
+            <label class="form-field" for="categoryInput"><span data-i18n="categoryLabel">Catégorie</span><select id="categoryInput" name="category" required><option value="food" data-category="food">Alimentation</option><option value="transport" data-category="transport">Transport</option><option value="housing" data-category="housing">Logement</option><option value="study" data-category="study">Études</option><option value="phone" data-category="phone">Téléphone</option><option value="leisure" data-category="leisure">Sorties</option><option value="other" data-category="other">Autre</option></select></label>
+            <label class="form-field" for="noteInput"><span data-i18n="noteLabel">Détail <span class="optional-label">(facultatif)</span></span><input id="noteInput" name="note" type="text" maxlength="100" placeholder="Ex. Courses de la semaine" data-i18n-placeholder="notePlaceholder" autocomplete="off"></label>
+            <label class="form-field" for="dateInput"><span data-i18n="dateLabel">Date</span><input id="dateInput" name="date" type="date" required></label>
+            <button class="button button-primary add-submit" type="submit"><span aria-hidden="true">＋</span><span data-i18n="submitExpense">Enregistrer la dépense</span></button>
+            <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="privacy-panel" aria-labelledby="privacyTitle">
+          <div class="privacy-panel-icon" aria-hidden="true">⌂</div>
+          <div><h3 id="privacyTitle" data-i18n="privacyTitle">Tes données, chez toi.</h3><p data-i18n="privacyText">Mizan ne crée pas de compte et n’envoie pas tes dépenses sur un serveur. Tes données restent dans le stockage de ce navigateur.</p></div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="tools-panel" aria-labelledby="toolsTitle">
+      <div class="tools-intro"><p class="eyebrow eyebrow-muted" data-i18n="toolsEyebrow">TES DONNÉES</p><h2 id="toolsTitle" data-i18n="toolsTitle">Sauvegarder ou exporter</h2><p data-i18n="toolsSubtitle">Garde une copie de tes dépenses ou repars à zéro.</p></div>
+      <div class="tools-actions">
+        <button class="button button-secondary" id="exportJson" type="button"><span aria-hidden="true">↧</span><span data-i18n="backupJson">Télécharger une sauvegarde</span></button>
+        <button class="button button-secondary" id="importJsonButton" type="button"><span aria-hidden="true">↥</span><span data-i18n="restoreJson">Restaurer une sauvegarde</span></button>
+        <input id="importJsonInput" class="visually-hidden" type="file" accept="application/json,.json">
+        <button class="button button-danger-quiet" id="clearData" type="button"><span aria-hidden="true">×</span><span data-i18n="clearData">Effacer mes données</span></button>
+      </div>
+    </section>
+
+    <footer class="footer"><span class="footer-logo">Mizan <span aria-hidden="true">·</span></span><span data-i18n="footerText">Un outil indépendant, gratuit et open source. Pas de compte, pas de suivi.</span><span class="footer-currency">MAD / د.م.</span></footer>
+  </main>
+
+  <dialog id="budgetDialog" class="dialog">
+    <form id="budgetForm" class="dialog-card">
+      <button class="dialog-close" type="button" id="closeBudgetDialog" aria-label="Close">×</button>
+      <p class="eyebrow eyebrow-muted" data-i18n="budgetDialogEyebrow">TON OBJECTIF</p>
+      <h2 data-i18n="budgetDialogTitle">Fixe ton budget du mois</h2>
+      <p class="dialog-description" data-i18n="budgetDialogText">Tu peux le modifier à tout moment. Le montant est enregistré seulement sur cet appareil.</p>
+      <label class="form-field" for="budgetInput"><span data-i18n="budgetDialogLabel">Budget mensuel (MAD)</span><input id="budgetInput" type="number" inputmode="decimal" min="0" max="100000000" step="0.01" required></label>
+      <div class="dialog-actions"><button class="button button-secondary" type="button" id="cancelBudget" data-i18n="cancel">Annuler</button><button class="button button-primary" type="submit" data-i18n="saveBudget">Enregistrer</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
